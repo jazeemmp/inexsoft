@@ -1,5 +1,5 @@
 import axios from "../api/axios";
-import { FC, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 
 interface User {
