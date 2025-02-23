@@ -4,10 +4,11 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { FormInput } from "./common/FormInput";
 import { addProjectValidation } from "../validations/addProjectValidation";
+import { useState } from "react";
 
 const AddProject = () => {
   const navigate = useNavigate();
-  
+  const [loading, setLoading] = useState(false);
   const formik = useFormik({
     validationSchema: addProjectValidation,
     initialValues: {
@@ -18,6 +19,7 @@ const AddProject = () => {
       projectImage: null,
     },
     onSubmit: async (values, { resetForm }) => {
+      setLoading(true)
       try {
         const formData = new FormData();
         Object.entries(values).forEach(([key, value]) => {
@@ -40,6 +42,8 @@ const AddProject = () => {
         resetForm();
       } catch (error) {
         console.error(error);
+      }finally{
+        setLoading(false)
       }
     },
   });
@@ -106,7 +110,7 @@ const AddProject = () => {
           type="submit"
           className="bg-red-500 text-white mt-10 cursor-pointer rounded px-4 py-2"
         >
-          <h1 className="text-lg font-bold uppercase">Add Project</h1>
+          <h1 className="text-lg font-bold uppercase">{loading ? "Loading..":"Add Project"}</h1>
         </button>
       </form>
     </div>

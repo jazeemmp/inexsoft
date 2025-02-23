@@ -19,11 +19,12 @@ interface Flat {
   isBooked?: boolean;
 }
 
-interface FlatProps {
-  flats: Flat[];
+interface FlatsCardProps {
+  flat: Flat;
+  setFlats: React.Dispatch<React.SetStateAction<Flat[]>>;
 }
 
-const FlatsCard: React.FC<FlatProps> = ({ flats }) => {
+const FlatsCard: React.FC<FlatsCardProps> = ({ flat, setFlats }) => {
   const token = localStorage.getItem("token");
   const [showBooking, setShowBooking] = useState(false);
   const [confirmBooking, setConfirmBooking] = useState(false);
@@ -51,6 +52,14 @@ const FlatsCard: React.FC<FlatProps> = ({ flats }) => {
     try {
       await axiosInstance.post(`/book/flat/${flatId}`);
       setShowBooking(false);
+
+      // Update the flats list with the booked status
+      setFlats(prevFlats => 
+        prevFlats.map(flatItem => 
+          flatItem._id === flatId ? { ...flatItem, isBooked: true } : flatItem
+        )
+      );
+
       toast.success("Flat booked successfully!");
     } catch (error) {
       setShowBooking(false);
@@ -65,59 +74,57 @@ const FlatsCard: React.FC<FlatProps> = ({ flats }) => {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {flats.map((flat) => (
-        <div key={flat._id} className="shadow-md w-full flex justify-between items-center gap-6 p-4 rounded-2xl bg-white">
-          <div>
-            <img
-              src={flat.flatImage || "https://via.placeholder.com/150"}
-              className="w-full h-64 object-contain rounded-md"
-              alt="Flat"
-            />
-          </div>
-          <div className="flex-1">
-            <div className="grid grid-cols-3 gap-3">
-              <div>
-                <p className="text-gray-400">Flat Type</p>
-                <p className="font-medium">{flat.flatType}</p>
-              </div>
-              <div>
-                <p className="text-gray-400">Floor</p>
-                <p className="font-medium">{flat.floorNumber}</p>
-              </div>
-              <div>
-                <p className="text-gray-400">Flat Price</p>
-                <p className="font-medium">{flat.flatPrice} Lakhs</p>
-              </div>
-              <div>
-                <p className="text-gray-400">Flat Number</p>
-                <p className="font-medium">{flat.flatNumber}</p>
-              </div>
-              <div>
-                <p className="text-gray-400">Furnished Status</p>
-                <p className="font-medium">{flat.furnishingStatus}</p>
-              </div>
-              <div>
-                <p className="text-gray-400">Super Built-up Area</p>
-                <p className="font-medium">{flat.carpetArea} sq.ft</p>
-              </div>
-              <div>
-                <p className="text-gray-400">Flat Booked ??</p>
-                <p className="font-medium">
-                  {flat.isBooked ? "This Flat is not available for booking" : "This Flat is Available"}
-                </p>
-              </div>
-            </div>
-            <button
-              disabled={flat.isBooked}
-              onClick={() => handleBookFlat(flat)}
-              className="bg-red-500 rounded-3xl px-5 disabled:bg-gray-300 text-white font-semibold py-2 text-lg mt-4 w-full"
-            >
-              Book Flat
-            </button>
-          </div>
+    <div className="w-full">
+      <div key={flat._id} className="shadow-md w-full flex justify-between items-center gap-6 p-4 rounded-2xl bg-white">
+        <div>
+          <img
+            src={flat.flatImage}
+            className=" h-64 object-contain rounded-md"
+            alt="Flat"
+          />
         </div>
-      ))}
+        <div className="flex-1">
+          <div className="grid grid-cols-3 gap-3">
+            <div>
+              <p className="text-gray-400">Flat Type</p>
+              <p className="font-medium">{flat.flatType ?? "N/A"}</p>
+            </div>
+            <div>
+              <p className="text-gray-400">Floor</p>
+              <p className="font-medium">{flat.floorNumber ?? "N/A"}</p>
+            </div>
+            <div>
+              <p className="text-gray-400">Flat Price</p>
+              <p className="font-medium">{flat.flatPrice ?? "N/A"} Lakhs</p>
+            </div>
+            <div>
+              <p className="text-gray-400">Flat Number</p>
+              <p className="font-medium">{flat.flatNumber ?? "N/A"}</p>
+            </div>
+            <div>
+              <p className="text-gray-400">Furnished Status</p>
+              <p className="font-medium">{flat.furnishingStatus ?? "N/A"}</p>
+            </div>
+            <div>
+              <p className="text-gray-400">Super Built-up Area</p>
+              <p className="font-medium">{flat.carpetArea ?? "N/A"} sq.ft</p>
+            </div>
+            <div>
+              <p className="text-gray-400">Flat Booked ??</p>
+              <p className="font-medium">
+                {flat.isBooked ? "This Flat is not available for booking" : "This Flat is Available"}
+              </p>
+            </div>
+          </div>
+          <button
+            disabled={flat.isBooked}
+            onClick={() => handleBookFlat(flat)}
+            className="bg-red-500 rounded-3xl px-5 disabled:bg-gray-300 text-white font-semibold py-2 text-lg mt-4 w-full"
+          >
+            Book Flat
+          </button>
+        </div>
+      </div>
 
       {showBooking && selectedFlat && (
         <Modal onClose={() => setShowBooking(false)}>

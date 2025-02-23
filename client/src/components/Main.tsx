@@ -32,11 +32,11 @@ const Main = () => {
           Projects
         </h1>
       </div>
-      {projets.map((project: Project) => (
-        <div className="grid grid-cols-2 gap-x-5">
-          <ProjectCard project={project} />
-        </div>
-      ))}
+      <div className="grid grid-cols-2 gap-5">
+        {projets.map((project: Project) => (
+          <ProjectCard project={project} key={project._id} />
+        ))}
+      </div>
     </main>
   );
 };

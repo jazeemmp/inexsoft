@@ -5,10 +5,10 @@ import NavBar from "../components/NavBar";
 const ViewFlatsPage = () => {
   const { id } = useParams<{ id: string }>();
   return (
-    <>
+    <div>
       <NavBar />
       <ListOfFlats id={id} />
-    </>
+    </div>
   );
 };
 

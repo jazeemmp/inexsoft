@@ -13,6 +13,7 @@ interface Project {
 }
 const AddFlats = () => {
   const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const formik = useFormik({
     validationSchema: addFlatValidation,
@@ -27,6 +28,7 @@ const AddFlats = () => {
       image: null,
     },
     onSubmit: async (values, { resetForm }) => {
+      setLoading(true);
       try {
         const formData = new FormData();
 
@@ -56,6 +58,8 @@ const AddFlats = () => {
         });
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     },
   });
@@ -185,10 +189,14 @@ const AddFlats = () => {
           type="submit"
           className="bg-red-500 text-white mt-10 cursor-pointer rounded px-4 py-2"
         >
-          <h1 className="text-lg font-bold uppercase ">
-            Add This Flat To{" "}
-            {projects.find((project) => project._id === formik.values.projectId)
-              ?.projectName || "Project"}
+          <h1 className="text-lg font-bold uppercase">
+            {loading
+              ? "Loading"
+              : `Add This Flat To ${
+                  projects.find(
+                    (project) => project._id === formik.values.projectId
+                  )?.projectName || "Project"
+                }`}
           </h1>
         </button>
       </form>

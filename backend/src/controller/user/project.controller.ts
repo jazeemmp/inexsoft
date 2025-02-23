@@ -71,10 +71,7 @@ export const bookFlat = async (req: AuthRequest, res: Response) => {
 
     await newBooking.save();
 
-    res.status(201).json({
-      message: "Flat booked successfully",
-      booking: newBooking,
-    });
+    res.status(201).json(flat);
   } catch (error) {
     console.error("Booking failed:", error);
     res.status(500).json({ message: "Internal server error", error });

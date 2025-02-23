@@ -10,7 +10,16 @@ dotenv.config();
 mongoConnect();
 
 const app = express();
-app.use(cors({origin:"*"}));
+const corsOptions = {
+  origin: [
+    "https://inexsoft.vercel.app", 
+    "https://inexsoft-xren.vercel.app",
+    "http://localhost:5173" 
+  ],
+  credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
