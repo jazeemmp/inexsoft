@@ -9,16 +9,7 @@ dotenv.config();
 mongoConnect();
 
 const app = express();
-const corsOptions = {
-  origin: [
-    "http://localhost:5173",
-    "http://localhost:5174",
-    "https://your-frontend.vercel.app", // ✅ Add frontend URL deployed on Vercel
-  ],
-  credentials: true, 
-};
-
-app.use(cors(corsOptions));
+app.use(cors({origin:"*"}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node dist/index.js",
     "build": "tsc",
-    "vercel-build": "tsc"
+    "vercel-build": "tsc",
+    "dev":"nodemon"
   },
   "dependencies": {
     "@vercel/node": "^5.1.8",
