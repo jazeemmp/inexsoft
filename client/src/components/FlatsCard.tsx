@@ -1,10 +1,13 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Modal from "./Modal";
 import axios from "../apis/axios";
 import { toast } from "sonner";
+interface FlatProps {
+  flats: { id: string; name: string; price: number }[]; // Adjust the type based on your data
+}
 
-const FlatsCard = ({ flats }) => {
+const FlatsCard: React.FC<FlatProps> = ({ flats }) => {
   const token = localStorage.getItem("token");
   const [showBooking, setShowBooking] = useState(false);
   const [confirmBooking, setConfirmBooking] = useState(false);
