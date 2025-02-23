@@ -4,6 +4,7 @@ import Modal from "./Modal";
 import axiosInstance from "../apis/axios";
 import axios from "axios";
 import { toast } from "sonner";
+
 interface Flat {
   _id: string;
   name: string;
@@ -44,18 +45,17 @@ const FlatsCard: React.FC<FlatProps> = ({ flats }) => {
     }
   }, [confirmBooking, selectedFlat]);
 
-  const bookFlat = async () => {
-    console.log("calll");
-  
+  const bookFlat = async (flatId: string) => {
+    console.log("Booking initiated for:", flatId);
+
     try {
-      await axiosInstance.post(`/book/flat/${flats._id}`);
+      await axiosInstance.post(`/book/flat/${flatId}`);
       setShowBooking(false);
       toast.success("Flat booked successfully!");
     } catch (error) {
       setShowBooking(false);
       console.error("Booking failed:", error);
-  
-      // Ensure TypeScript knows error might be an Axios error
+
       if (axios.isAxiosError(error) && error.response) {
         toast.error(error.response.data.message);
       } else {
@@ -63,7 +63,6 @@ const FlatsCard: React.FC<FlatProps> = ({ flats }) => {
       }
     }
   };
-  
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -136,6 +135,5 @@ const FlatsCard: React.FC<FlatProps> = ({ flats }) => {
     </div>
   );
 };
-
 
 export default FlatsCard;
