@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Modal from "./Modal";
-import axios from "../apis/axios";
+import axiosInstance from "../apis/axios";
+import axios from "axios";
 import { toast } from "sonner";
 interface Flat {
   _id: string;
@@ -43,17 +44,26 @@ const FlatsCard: React.FC<FlatProps> = ({ flats }) => {
     }
   }, [confirmBooking, selectedFlat]);
 
-  const bookFlat = async (flatId: string) => {
+  const bookFlat = async () => {
+    console.log("calll");
+  
     try {
-      await axios.post(`/book/flat/${flatId}`);
+      await axiosInstance.post(`/book/flat/${flats._id}`);
       setShowBooking(false);
       toast.success("Flat booked successfully!");
     } catch (error) {
       setShowBooking(false);
       console.error("Booking failed:", error);
-      toast.error(error?.response?.data?.message || "Booking failed.");
+  
+      // Ensure TypeScript knows error might be an Axios error
+      if (axios.isAxiosError(error) && error.response) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("An unexpected error occurred");
+      }
     }
   };
+  
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
