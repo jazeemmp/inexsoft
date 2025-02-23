@@ -20,7 +20,7 @@ const ListOfFlats = ({ id }: any) => {
     <div>
       {flats?.map((data, key) => (
         <div className="grid grid-cols-1 px-20 py-10">
-          <FlatsCard flats={data}/>
+          <FlatsCard key={key} flats={data}/>
         </div>
       ))}
     </div>
